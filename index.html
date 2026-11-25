@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Career Version of the INCOM | Fukubayashi & Fuji (2021)</title>
+<style>
+  :root { --ink:#222; --muted:#666; --accent:#1f5d4c; --line:#ddd6c8; --bg:#fbf9f4; }
+  html { color-scheme:light; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:17px/1.75 Georgia, "Times New Roman", "Yu Mincho", "Hiragino Mincho ProN", serif; }
+  .wrap { max-width:860px; margin:0 auto; padding:64px 28px 96px; }
+  header { border-bottom:3px double var(--line); padding-bottom:28px; margin-bottom:36px; }
+  .kicker, .sans { font-family:system-ui, "Segoe UI", "Yu Gothic UI", sans-serif; }
+  .kicker { font-size:12px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); }
+  h1 { font-size:34px; line-height:1.25; margin:14px 0 16px; font-weight:normal; }
+  .lead { font-size:18px; color:#444; }
+  h2 { font-size:21px; font-weight:normal; color:var(--accent); margin:52px 0 12px; border-bottom:1px solid var(--line); padding-bottom:6px; }
+  h2 span { font:600 13px system-ui, sans-serif; color:var(--muted); margin-right:10px; }
+  .facts { display:flex; flex-wrap:wrap; font:14px/1.4 system-ui, sans-serif; margin-top:22px; row-gap:10px; }
+  .facts div { padding:4px 18px 4px 0; margin-right:18px; border-right:1px solid var(--line); }
+  .facts div:last-child { border:none; }
+  .facts b { display:block; font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-weight:600; }
+  .ref { padding-left:2em; text-indent:-2em; margin:8px 0; }
+  a { color:var(--accent); }
+  .switch { display:flex; flex-wrap:wrap; gap:0; font:600 13px system-ui, sans-serif; margin:6px 0 16px; border:1px solid var(--accent); width:max-content; max-width:100%; }
+  .switch button { border:none; background:#fff; color:var(--accent); padding:8px 14px; cursor:pointer; font:inherit; }
+  .switch button + button { border-left:1px solid var(--accent); }
+  .switch button.on { background:var(--accent); color:#fff; }
+  blockquote { margin:0; padding:14px 20px; background:#fff; border-left:3px solid var(--accent); }
+  .note { font:14px/1.6 system-ui, sans-serif; color:var(--muted); margin:8px 0 0; }
+  table { width:100%; border-collapse:collapse; font-size:16px; margin-top:18px; }
+  th { text-align:left; font:600 12px system-ui, sans-serif; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); border-bottom:2px solid var(--ink); padding:8px; }
+  td { vertical-align:top; padding:10px 8px; border-bottom:1px solid var(--line); }
+  td.n { width:2.5em; color:var(--muted); }
+  td.s { width:9.5em; white-space:nowrap; font:600 12px/1.9 system-ui, sans-serif; color:var(--accent); }
+  tr.ex td { color:#aaa; }
+  tr.ex td.s { color:#b45309; }
+  .btn { font:600 13px system-ui, sans-serif; background:var(--accent); color:#fff; border:none; padding:9px 16px; cursor:pointer; margin-top:16px; }
+  .btn.ghost { background:#fff; color:var(--accent); border:1px solid var(--accent); margin-left:6px; }
+  ul { padding-left:1.2em; }
+  li { margin:4px 0; }
+  dt { font-weight:bold; margin-top:16px; }
+  dd { margin:4px 0 0; }
+  .caution { background:#fff8e6; border:1px solid #e9c46a; border-left:4px solid #d4a017; padding:12px 18px; font:15px/1.65 system-ui, "Segoe UI", sans-serif; margin:20px 0; }
+  .contact { background:#fff; border:1px solid var(--line); padding:20px 24px; }
+  footer { margin-top:64px; font:13px system-ui, sans-serif; color:var(--muted); border-top:1px solid var(--line); padding-top:16px; }
+  @media (max-width:640px){ h1{font-size:27px;} td.s{display:none;} .wrap{padding:40px 18px 72px;} }
+  @media print { .btn, .switch { display:none; } body { background:#fff; } }
+</style>
+<script src="data.js"></script>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+const S = SCALE;
+let lang = "en";
+const subName = { A: "Ability", O: "Opinion" };
+
+function renderItems() {
+  const v = S.versions[lang];
+  document.getElementById("instr").textContent = v.instruction;
+  document.getElementById("instr").lang = lang === "ja" ? "ja" : "en";
+  document.getElementById("scale").textContent = "Scale: " + v.scale;
+  document.getElementById("vnote").textContent = v.note || "";
+  document.getElementById("rows").innerHTML = S.items.map(i => `
+    <tr class="${i.used ? "" : "ex"}">
+      <td class="n">${i.n}</td>
+      <td lang="${lang === "ja" ? "ja" : "en"}">${i[lang]}</td>
+      <td class="s">${i.used ? subName[i.sub] : "Excluded"}</td>
+    </tr>`).join("");
+  document.querySelectorAll(".switch:not(#stSwitch) button").forEach(b => b.classList.toggle("on", b.dataset.v === lang));
+}
+
+function copyItems() {
+  const t = S.items.filter(i => i.used).map(i => i.n + ". " + i[lang]).join("\n");
+  navigator.clipboard.writeText(t).then(() => {
+    const b = document.getElementById("copyBtn"); b.textContent = "Copied ✓";
+    setTimeout(() => b.textContent = "Copy 9 items", 1500);
+  });
+}
+
+const contact = S.contactForm
+  ? `<p>If your question is not answered above, please use the <a href="${S.contactForm}" target="_blank" rel="noopener">contact form</a>. We will reply by email.</p>`
+  : `<p>If your question is not answered above, please use the contact form (link coming soon).</p>`;
+
+document.getElementById("app").innerHTML = `
+<header>
+  <div class="kicker">Measurement resource</div>
+  <h1>${S.title}</h1>
+  <p class="lead">${S.lead}</p>
+  <div class="facts">${S.facts.map(f => `<div><b>${f.k}</b>${f.v}</div>`).join("")}</div>
+  <div class="caution">${S.validityNote}</div>
+</header>
+
+<h2><span>01</span>Source</h2>
+${S.citations.map(c => `<p class="ref">${c.text} <a href="${c.doi}">${c.doi}</a></p>`).join("")}
+
+<h2><span>02</span>Instructions and items</h2>
+<p class="note">Note: Only the Japanese version has been validated. The English version is a back-translation (see above).</p>
+<div class="switch">${Object.entries(S.versions).map(([k, v]) => `<button data-v="${k}">${v.label}</button>`).join("")}</div>
+<blockquote id="instr"></blockquote>
+<p class="note" id="scale"></p>
+<p class="note" id="vnote"></p>
+<table>
+  <thead><tr><th>No.</th><th>Item</th><th>Subscale</th></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+<p class="note">Item numbers follow the INCOM (Gibbons & Buunk, 1999). Items 5 and 11 were excluded from analysis and are shown for reference only. (R) = reverse-coded.</p>
+<button class="btn" id="copyBtn" onclick="copyItems()">Copy 9 items</button><button class="btn ghost" onclick="downloadCSV()">Download CSV</button>
+
+<h2><span>03</span>Scoring</h2>
+<ul>${S.scoring.map(s => `<li>${s}</li>`).join("")}</ul>
+
+<h2><span>04</span>Psychometric information</h2>
+<ul>${S.psychometrics.map(s => `<li>${s}</li>`).join("")}</ul>
+
+<h2><span>05</span>State version: direction of comparison (Study 2)</h2>
+<p>${S.state.intro}</p>
+<p class="ref">${S.state.ref.text} <a href="${S.state.ref.doi}">${S.state.ref.doi}</a></p>
+<div class="switch" id="stSwitch"><button data-v="en">English</button><button data-v="ja">日本語（原版）</button></div>
+<blockquote>${S.state.instruction}</blockquote>
+<p class="note">${S.state.scale}</p>
+<table>
+  <thead><tr><th>No.</th><th>Item</th><th>Direction</th></tr></thead>
+  <tbody id="stRows"></tbody>
+</table>
+<p class="note" id="stNote"></p>
+<ul>${S.state.scoring.map(s => `<li>${s}</li>`).join("")}</ul>
+
+<h2><span>06</span>Terms of use</h2>
+<ul>${S.terms.map(s => `<li>${s}</li>`).join("")}</ul>
+
+<h2><span>07</span>Frequently asked questions</h2>
+<dl>${S.faq.map(f => `<dt>${f.q}</dt><dd>${f.a}</dd>`).join("")}</dl>
+
+<h2><span>08</span>Contact</h2>
+<div class="contact">${contact}</div>
+
+<footer>Nao Fukubayashi · Last updated ${S.updated}</footer>`;
+
+let stLang = "en";
+function renderState() {
+  document.getElementById("stRows").innerHTML = S.state.items.map(i => `
+    <tr><td class="n">${i.n}</td><td lang="${stLang}">${i[stLang]}</td><td class="s">${i.dir}</td></tr>`).join("");
+  document.getElementById("stNote").textContent = stLang === "en" ? S.state.enNote : "";
+  document.querySelectorAll("#stSwitch button").forEach(b => b.classList.toggle("on", b.dataset.v === stLang));
+}
+
+document.querySelectorAll(".switch:not(#stSwitch) button").forEach(b => b.onclick = () => { lang = b.dataset.v; renderItems(); });
+document.querySelectorAll("#stSwitch button").forEach(b => b.onclick = () => { stLang = b.dataset.v; renderState(); });
+renderItems();
+renderState();
+</script>
+</body>
+</html>
